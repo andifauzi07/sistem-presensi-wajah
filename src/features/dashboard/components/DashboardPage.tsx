@@ -61,7 +61,7 @@ export const DashboardPage: React.FC = () => {
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
 					<Card className="border-none shadow-sm hover:shadow-md transition-shadow">
 						<CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-							<CardTitle className="text-sm font-medium text-slate-500">Total Employees</CardTitle>
+							<CardTitle className="text-sm font-medium text-slate-500">Total Pegawai</CardTitle>
 							<Users className="h-4 w-4 text-slate-400" />
 						</CardHeader>
 						<CardContent>{isStatsLoading ? <Loader2 className="h-8 w-8 animate-spin text-slate-200" /> : <div className="text-3xl font-bold text-slate-900">{stats?.totalEmployees || 0}</div>}</CardContent>
@@ -69,7 +69,7 @@ export const DashboardPage: React.FC = () => {
 
 					<Card className="border-none shadow-sm hover:shadow-md transition-shadow">
 						<CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-							<CardTitle className="text-sm font-medium text-slate-500">Present Today</CardTitle>
+							<CardTitle className="text-sm font-medium text-slate-500">Hadir Hari Ini</CardTitle>
 							<UserCheck className="h-4 w-4 text-green-500" />
 						</CardHeader>
 						<CardContent>{isStatsLoading ? <Loader2 className="h-8 w-8 animate-spin text-slate-200" /> : <div className="text-3xl font-bold text-slate-900">{stats?.presentToday || 0}</div>}</CardContent>
@@ -77,7 +77,7 @@ export const DashboardPage: React.FC = () => {
 
 					<Card className="border-none shadow-sm hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
 						<CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-							<CardTitle className="text-sm font-medium text-slate-500">Quick Actions</CardTitle>
+							<CardTitle className="text-sm font-medium text-slate-500">Pintasan</CardTitle>
 							<Activity className="h-4 w-4 text-blue-500" />
 						</CardHeader>
 						<CardContent className="flex gap-2">
@@ -86,7 +86,7 @@ export const DashboardPage: React.FC = () => {
 								variant="outline"
 								className="flex-1 border-slate-200 hover:bg-slate-50">
 								<FileText className="mr-2 h-4 w-4" />
-								Report
+								Laporan
 							</Button>
 							<EmployeeForm />
 						</CardContent>
@@ -103,13 +103,13 @@ export const DashboardPage: React.FC = () => {
 								value="activity"
 								className="data-[state=active]:bg-slate-900 data-[state=active]:text-white">
 								<Clock className="mr-2 h-4 w-4" />
-								Real-time Activity
+								Aktifitas Hari Ini
 							</TabsTrigger>
 							<TabsTrigger
 								value="employees"
 								className="data-[state=active]:bg-slate-900 data-[state=active]:text-white">
 								<Users className="mr-2 h-4 w-4" />
-								Employee Directory
+								Manajemen Pegawai
 							</TabsTrigger>
 						</TabsList>
 					</div>
@@ -119,17 +119,17 @@ export const DashboardPage: React.FC = () => {
 						className="space-y-4">
 						<Card className="border-none shadow-sm">
 							<CardHeader>
-								<CardTitle>Recent Attendance Logs</CardTitle>
-								<CardDescription>Live updates of employee check-ins and check-outs</CardDescription>
+								<CardTitle>Catatan Kehadiran Terbaru</CardTitle>
+								<CardDescription>Pembaruan langsung mengenai waktu masuk dan keluar karyawan.</CardDescription>
 							</CardHeader>
 							<CardContent>
 								<div className="border rounded-lg overflow-hidden">
 									<Table>
 										<TableHeader>
 											<TableRow className="bg-slate-50/50">
-												<TableHead>Employee</TableHead>
-												<TableHead>Type</TableHead>
-												<TableHead>Time</TableHead>
+												<TableHead>Pegawai</TableHead>
+												<TableHead>Tipe</TableHead>
+												<TableHead>Waktu</TableHead>
 												<TableHead>Status</TableHead>
 											</TableRow>
 										</TableHeader>
@@ -160,7 +160,7 @@ export const DashboardPage: React.FC = () => {
 													<TableCell
 														colSpan={4}
 														className="h-32 text-center text-slate-500">
-														No activity recorded today.
+														Tidak ada aktivitas yang tercatat hari ini.
 													</TableCell>
 												</TableRow>
 											)}
@@ -175,8 +175,8 @@ export const DashboardPage: React.FC = () => {
 						<Card className="border-none shadow-sm">
 							<CardHeader className="flex flex-row items-center justify-between">
 								<div>
-									<CardTitle>Employee Directory</CardTitle>
-									<CardDescription>Manage your organization's employees and their face profiles</CardDescription>
+									<CardTitle>Direktori Karyawan</CardTitle>
+									<CardDescription>Kelola karyawan organisasi Anda dan profil wajah mereka.</CardDescription>
 								</div>
 							</CardHeader>
 							<CardContent>

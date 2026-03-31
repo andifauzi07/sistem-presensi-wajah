@@ -21,10 +21,10 @@ export const LoginPage: React.FC = () => {
 		try {
 			const response = await apiService.auth.login(email, password);
 			setAuth(response.token, response.user);
-			toast.success('Login successful! Welcome back.');
+			toast.success('Berhasil Masuk! Selamat datang kembali.');
 			navigate('/dashboard');
 		} catch (error: any) {
-			toast.error(error.message || 'Invalid credentials');
+			toast.error(error.message || 'Kredensial tidak valid');
 		} finally {
 			setIsLoading(false);
 		}
@@ -88,7 +88,7 @@ export const LoginPage: React.FC = () => {
 								variant="link"
 								onClick={() => navigate('/')}
 								className="text-slate-500">
-								Back to Attendance Page
+								Kehalaman Presensi
 							</Button>
 						</CardFooter>
 					</form>
