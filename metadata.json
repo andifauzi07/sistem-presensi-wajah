@@ -1,0 +1,5 @@
+{
+	"name": "RSUD La Mappanenning",
+	"description": "Sistem presensi pegawai RSUD La Mappanenning dengan pengenalan wajah.",
+	"requestFramePermissions": ["camera"]
+}
