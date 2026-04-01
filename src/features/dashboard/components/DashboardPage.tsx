@@ -1,22 +1,28 @@
 import React from 'react';
 import { useDashboard } from '../hooks/useDashboard';
-import { useEmployees } from '../../employee/hooks/useEmployees';
+import { useEmployees } from '@/features/employee/employee.hooks';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { EmployeeList } from '../../employee/components/EmployeeList';
 import { EmployeeForm } from '../../employee/components/EmployeeForm';
-import { useAuthStore } from '../../auth/hooks/useAuth';
+
 import { generateAttendanceReport } from '../utils/reportGenerator';
 import { Users, UserCheck, FileText, LogOut, Activity, LayoutDashboard, Loader2, Clock } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
+import { supabase } from '@/lib/supabase';
+import { useSession } from '@/features/auth/auth.hooks';
 
 export const DashboardPage: React.FC = () => {
 	const { data: stats, isLoading: isStatsLoading } = useDashboard();
-	const { data: employees } = useEmployees();
-	const { logout, user } = useAuthStore();
+	const { data: employees, isLoading } = useEmployees();
+	const { data } = useSession();
+
+	const logout = async () => {
+		await supabase.auth.signOut();
+	};
 
 	const handleGenerateReport = () => {
 		if (employees && stats?.recentActivity) {
@@ -42,8 +48,8 @@ export const DashboardPage: React.FC = () => {
 
 					<div className="flex items-center gap-4">
 						<div className="text-right hidden sm:block">
-							<p className="text-sm font-medium text-slate-900">{user?.name}</p>
-							<p className="text-xs text-slate-500">{user?.email}</p>
+							<p className="text-sm font-medium text-slate-900">{data?.user?.email}</p>
+							{/* <p className="text-xs text-slate-500">{user}</p> */}
 						</div>
 						<Button
 							variant="ghost"

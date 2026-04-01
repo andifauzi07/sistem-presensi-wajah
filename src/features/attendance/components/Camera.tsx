@@ -23,7 +23,7 @@ export const Camera: React.FC<CameraProps> = ({ onCapture, isLoading }) => {
 				setIsModelLoaded(true);
 				await startCamera();
 			} catch (error) {
-				console.error('Gagal Memuat Model', error);
+				console.log('Gagal Memuat Model');
 				setCameraError('Gagal memuat model pendeteksi wajah.');
 			}
 		};

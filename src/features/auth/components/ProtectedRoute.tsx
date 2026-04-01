@@ -1,12 +1,12 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuthStore } from '../hooks/useAuth';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '@/features/auth/auth.context';
 
-export const ProtectedRoute = () => {
-  const { token } = useAuthStore();
+export const ProtectedRoute = ({ children }: any) => {
+	const { session, loading } = useAuth();
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
+	if (loading) return <div>Loading...</div>;
 
-  return <Outlet />;
+	if (!session) return <Navigate to="/login" />;
+
+	return children;
 };

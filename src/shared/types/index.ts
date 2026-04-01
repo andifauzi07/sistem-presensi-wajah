@@ -1,34 +1,11 @@
-export interface Employee {
-  id: string;
-  name: string;
-  email: string;
-  faceDescriptor: number[]; // Float32Array serialized as number[]
-  createdAt: string;
-}
+import { Database } from '../../../database.types';
 
-export interface AttendanceLog {
-  id: string;
-  employeeId: string;
-  employeeName: string;
-  type: 'check-in' | 'check-out';
-  timestamp: string;
-  location?: {
-    lat: number;
-    lng: number;
-  };
-}
+type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
 
-export interface DashboardStats {
-  totalEmployees: number;
-  presentToday: number;
-  recentActivity: AttendanceLog[];
-}
+export type Employee = Tables<'employee'>;
+export type Attendance = Tables<'attendance'>;
 
-export interface AuthResponse {
-  token: string;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-  };
-}
+export type AttendanceSubmitResult = {
+	type: 'check-in' | 'check-out' | 'already-completed' | 'unknown';
+	employee?: Employee;
+};

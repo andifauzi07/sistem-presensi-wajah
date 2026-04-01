@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../hooks/useAuth';
-import { apiService } from '@/shared/services/api';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { useLogin } from '../auth.hooks';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -11,22 +10,21 @@ import { Loader2, LogIn, Lock, Mail } from 'lucide-react';
 export const LoginPage: React.FC = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [isLoading, setIsLoading] = useState(false);
-	const { setAuth } = useAuthStore();
+	const { mutateAsync, isPending: isLoading } = useLogin();
+
 	const navigate = useNavigate();
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleLogin = async (e: React.FormEvent) => {
 		e.preventDefault();
-		setIsLoading(true);
 		try {
-			const response = await apiService.auth.login(email, password);
-			setAuth(response.token, response.user);
-			toast.success('Berhasil Masuk! Selamat datang kembali.');
-			navigate('/dashboard');
-		} catch (error: any) {
-			toast.error(error.message || 'Kredensial tidak valid');
-		} finally {
-			setIsLoading(false);
+			await mutateAsync({
+				email: email,
+				password: password,
+			});
+
+			navigate('/dashboard', { replace: true });
+		} catch {
+			alert('Login gagal');
 		}
 	};
 
@@ -45,7 +43,7 @@ export const LoginPage: React.FC = () => {
 							className="h-20 w-20 bg-transparent mx-auto"
 						/>
 					</CardHeader>
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleLogin}>
 						<CardContent className="space-y-4 pb-4">
 							<div className="space-y-4">
 								<label className="text-sm font-medium text-slate-700">Email</label>

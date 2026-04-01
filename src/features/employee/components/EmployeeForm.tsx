@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useEmployees } from '../hooks/useEmployees';
+// import { useEmployees } from '../hooks/useEmployees';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -7,7 +7,7 @@ import { Camera } from '../../attendance/components/Camera';
 import { Plus, UserPlus, Loader2, CheckCircle2 } from 'lucide-react';
 
 export const EmployeeForm: React.FC = () => {
-	const { create } = useEmployees();
+	// const { create } = useEmployees();
 	const [isOpen, setIsOpen] = useState(false);
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
@@ -17,7 +17,7 @@ export const EmployeeForm: React.FC = () => {
 		e.preventDefault();
 		if (!faceDescriptor) return;
 
-		await create.mutateAsync({ name, email, faceDescriptor });
+		// await create.mutateAsync({ name, email, faceDescriptor });
 		setIsOpen(false);
 		resetForm();
 	};
@@ -92,9 +92,9 @@ export const EmployeeForm: React.FC = () => {
 					<Button
 						type="submit"
 						className="w-full"
-						disabled={!faceDescriptor || create.isPending}>
-						{create.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
-						{create.isPending ? 'Mendaftarkan...' : 'Selesai Mendaftarkan'}
+						disabled={!faceDescriptor}>
+						{/* {create.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
+						{create.isPending ? 'Mendaftarkan...' : 'Selesai Mendaftarkan'} */}
 					</Button>
 				</form>
 			</DialogContent>
