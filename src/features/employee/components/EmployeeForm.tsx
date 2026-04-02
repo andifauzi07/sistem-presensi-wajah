@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
-// import { useEmployees } from '../hooks/useEmployees';
+import { useEmployees } from '@/features/employee/employee.hooks';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Camera } from '../../attendance/components/Camera';
 import { Plus, UserPlus, Loader2, CheckCircle2 } from 'lucide-react';
+import { toPgVector } from '@/lib/utils';
 
 export const EmployeeForm: React.FC = () => {
-	// const { create } = useEmployees();
+	const { create } = useEmployees();
 	const [isOpen, setIsOpen] = useState(false);
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
+	const [position, setPosition] = useState('');
 	const [faceDescriptor, setFaceDescriptor] = useState<number[] | null>(null);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!faceDescriptor) return;
 
-		// await create.mutateAsync({ name, email, faceDescriptor });
+		await create.mutateAsync({
+			nama: name,
+			email,
+			jabatan: position,
+			descriptor: toPgVector(faceDescriptor),
+		});
 		setIsOpen(false);
 		resetForm();
 	};
@@ -25,6 +32,7 @@ export const EmployeeForm: React.FC = () => {
 	const resetForm = () => {
 		setName('');
 		setEmail('');
+		setPosition('');
 		setFaceDescriptor(null);
 	};
 
@@ -48,14 +56,14 @@ export const EmployeeForm: React.FC = () => {
 				</DialogHeader>
 				<form
 					onSubmit={handleSubmit}
-					className="space-y-4">
+					className="space-y-2">
 					<div className="space-y-2">
 						<label className="text-sm font-medium">Nama Lengkap</label>
 						<Input
 							required
 							value={name}
 							onChange={(e) => setName(e.target.value)}
-							placeholder="John Doe"
+							placeholder="Masukkan nama"
 						/>
 					</div>
 					<div className="space-y-2">
@@ -65,7 +73,16 @@ export const EmployeeForm: React.FC = () => {
 							type="email"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
-							placeholder="john@example.com"
+							placeholder="Masukkan email"
+						/>
+					</div>
+					<div className="space-y-2">
+						<label className="text-sm font-medium">Jabatan</label>
+						<Input
+							required
+							value={position}
+							onChange={(e) => setPosition(e.target.value)}
+							placeholder="Masukkan Jabatan"
 						/>
 					</div>
 
@@ -93,8 +110,8 @@ export const EmployeeForm: React.FC = () => {
 						type="submit"
 						className="w-full"
 						disabled={!faceDescriptor}>
-						{/* {create.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
-						{create.isPending ? 'Mendaftarkan...' : 'Selesai Mendaftarkan'} */}
+						{create.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
+						{create.isPending ? 'Mendaftarkan...' : 'Selesai Mendaftarkan'}
 					</Button>
 				</form>
 			</DialogContent>

@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { Employee } from '@/shared/types';
+import { Employee, EmployeeInsert, EmployeeUpdate } from '@/shared/types';
 
 export const getEmployees = async () => {
 	const { data, error } = await supabase.from('employee').select('*');
@@ -8,15 +8,15 @@ export const getEmployees = async () => {
 	return data;
 };
 
-export const createEmployee = async (payload: Employee) => {
+export const createEmployee = async (payload: EmployeeInsert) => {
 	const { data, error } = await supabase.from('employee').insert(payload).select().single();
 
 	if (error) throw error;
 	return data;
 };
 
-export const updateEmployee = async (id: string, payload: Partial<{ name: string; email: string }>) => {
-	const { data, error } = await supabase.from('employee').update(payload).eq('id', id).select().single();
+export const updateEmployee = async (payload: EmployeeUpdate) => {
+	const { data, error } = await supabase.from('employee').update(payload).eq('id', payload.id).select().single();
 
 	if (error) throw error;
 	return data;

@@ -3,6 +3,7 @@ import { faceApiService } from '@/shared/services/face-api';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Loader2, Camera as CameraIcon } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface CameraProps {
 	onCapture: (descriptor: number[]) => void;
@@ -20,6 +21,7 @@ export const Camera: React.FC<CameraProps> = ({ onCapture, isLoading }) => {
 		const init = async () => {
 			try {
 				await faceApiService.loadModels();
+				console.log('model berhasil dimuat');
 				setIsModelLoaded(true);
 				await startCamera();
 			} catch (error) {
@@ -65,7 +67,7 @@ export const Camera: React.FC<CameraProps> = ({ onCapture, isLoading }) => {
 				const descriptor = faceApiService.getDescriptor(detection);
 				onCapture(descriptor);
 			} else {
-				alert('No face detected. Please ensure your face is clearly visible.');
+				toast.error('gagal mendeteksi wajah');
 			}
 		} catch (error) {
 			console.error('Detection error', error);

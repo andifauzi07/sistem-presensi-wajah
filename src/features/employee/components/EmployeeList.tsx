@@ -7,7 +7,7 @@ import { Trash2, User, Loader2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export const EmployeeList: React.FC = () => {
-	const { data: employees, isLoading } = useEmployees();
+	const { data: employees, isLoading, delete: deleteMutation } = useEmployees();
 
 	if (isLoading) {
 		return (
@@ -28,10 +28,10 @@ export const EmployeeList: React.FC = () => {
 				<TableHeader>
 					<TableRow className="bg-slate-50/50">
 						<TableHead className="w-[80px]">Profile</TableHead>
-						<TableHead>Name</TableHead>
+						<TableHead>Nama</TableHead>
 						<TableHead>Email</TableHead>
-						<TableHead>Joined Date</TableHead>
-						<TableHead className="text-right">Actions</TableHead>
+						<TableHead>Bergabung Pada</TableHead>
+						{/* <TableHead className="text-right">Aksi</TableHead> */}
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -50,14 +50,14 @@ export const EmployeeList: React.FC = () => {
 							<TableCell className="text-slate-500">{employee.email}</TableCell>
 							<TableCell className="text-slate-500">{new Date(employee.created_at).toLocaleDateString()}</TableCell>
 							<TableCell className="text-right">
-								{/* <Button
+								<Button
 									variant="ghost"
 									size="icon"
 									className="text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
 									onClick={() => deleteMutation.mutate(employee.id)}
 									disabled={deleteMutation.isPending}>
 									{deleteMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-								</Button> */}
+								</Button>
 							</TableCell>
 						</TableRow>
 					))}
