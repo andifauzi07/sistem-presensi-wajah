@@ -32,14 +32,14 @@ export const LoginPage: React.FC = () => {
 		<div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
 			<div className="w-full max-w-md space-y-8">
 				<div className="text-center space-y-2">
-					<h1 className="text-3xl font-bold tracking-tight text-slate-900">RSUD La Mappanenning</h1>
+					<h1 className="text-3xl font-bold tracking-tight text-slate-900">RSUD La Mappapenning</h1>
 				</div>
 
 				<Card className="border-none shadow-xl">
 					<CardHeader className="text-center">
 						<img
 							src="/image.png"
-							alt="RSUD La Mappanenning"
+							alt="RSUD La Mappapenning"
 							className="h-20 w-20 bg-transparent mx-auto"
 						/>
 					</CardHeader>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Camera } from './Camera';
-import { useAttendance } from '../hooks/useAttendance';
+import { useAttendance } from '../attendance.hooks';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,7 @@ export const AttendancePage: React.FC = () => {
 			<div className="w-full max-w-2xl space-y-8">
 				<div className="text-center space-y-2">
 					<h1 className="text-4xl font-bold tracking-tight text-slate-900">Sistem Presensi Pegawai</h1>
-					<p className="text-slate-500">RSUD La Mappanenning</p>
+					<p className="text-slate-500">RSUD La Mappapenning</p>
 				</div>
 
 				<Card className="border-none shadow-xl">
