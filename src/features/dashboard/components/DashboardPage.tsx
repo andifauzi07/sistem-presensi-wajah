@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDashboard } from '../hooks/useDashboard';
+// import { useDashboard } from '../hooks/useDashboard';
 import { useEmployees } from '@/features/employee/employee.hooks';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -16,7 +16,7 @@ import { supabase } from '@/lib/supabase';
 import { useSession } from '@/features/auth/auth.hooks';
 
 export const DashboardPage: React.FC = () => {
-	const { data: stats, isLoading: isStatsLoading } = useDashboard();
+	// const { data: stats, isLoading: isStatsLoading } = useDashboard();
 	const { data: employees, isLoading } = useEmployees();
 	const { data } = useSession();
 
@@ -24,11 +24,11 @@ export const DashboardPage: React.FC = () => {
 		await supabase.auth.signOut();
 	};
 
-	const handleGenerateReport = () => {
-		if (employees && stats?.recentActivity) {
-			generateAttendanceReport(employees, stats.recentActivity, new Date());
-		}
-	};
+	// const handleGenerateReport = () => {
+	// 	if (employees && stats?.recentActivity) {
+	// 		generateAttendanceReport(employees, stats.recentActivity, new Date());
+	// 	}
+	// };
 
 	return (
 		<div className="min-h-screen bg-slate-50 flex flex-col">
@@ -39,11 +39,11 @@ export const DashboardPage: React.FC = () => {
 						<div className="bg-transparent p-1.5 rounded-lg">
 							<img
 								src="/image.png"
-								alt="RSUD La Mappanenning"
+								alt="RSUD La Mappapenning"
 								className="h-10 w-10"
 							/>
 						</div>
-						<span className="font-bold text-xl tracking-tight text-slate-900">RSUD La Mappanenning</span>
+						<span className="font-bold text-xl tracking-tight text-slate-900">RSUD La Mappapenning</span>
 					</div>
 
 					<div className="flex items-center gap-4">
@@ -70,7 +70,7 @@ export const DashboardPage: React.FC = () => {
 							<CardTitle className="text-sm font-medium text-slate-500">Total Pegawai</CardTitle>
 							<Users className="h-4 w-4 text-slate-400" />
 						</CardHeader>
-						<CardContent>{isStatsLoading ? <Loader2 className="h-8 w-8 animate-spin text-slate-200" /> : <div className="text-3xl font-bold text-slate-900">{stats?.totalEmployees || 0}</div>}</CardContent>
+						{/* <CardContent>{isStatsLoading ? <Loader2 className="h-8 w-8 animate-spin text-slate-200" /> : <div className="text-3xl font-bold text-slate-900">{stats?.totalEmployees || 0}</div>}</CardContent> */}
 					</Card>
 
 					<Card className="border-none shadow-sm hover:shadow-md transition-shadow">
@@ -78,7 +78,7 @@ export const DashboardPage: React.FC = () => {
 							<CardTitle className="text-sm font-medium text-slate-500">Hadir Hari Ini</CardTitle>
 							<UserCheck className="h-4 w-4 text-green-500" />
 						</CardHeader>
-						<CardContent>{isStatsLoading ? <Loader2 className="h-8 w-8 animate-spin text-slate-200" /> : <div className="text-3xl font-bold text-slate-900">{stats?.presentToday || 0}</div>}</CardContent>
+						{/* <CardContent>{isStatsLoading ? <Loader2 className="h-8 w-8 animate-spin text-slate-200" /> : <div className="text-3xl font-bold text-slate-900">{stats?.presentToday || 0}</div>}</CardContent> */}
 					</Card>
 
 					<Card className="border-none shadow-sm hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
@@ -88,7 +88,7 @@ export const DashboardPage: React.FC = () => {
 						</CardHeader>
 						<CardContent className="flex gap-2">
 							<Button
-								onClick={handleGenerateReport}
+								// onClick={handleGenerateReport}
 								variant="outline"
 								className="flex-1 border-slate-200 hover:bg-slate-50">
 								<FileText className="mr-2 h-4 w-4" />
@@ -140,7 +140,7 @@ export const DashboardPage: React.FC = () => {
 											</TableRow>
 										</TableHeader>
 										<TableBody>
-											{stats?.recentActivity.map((log) => (
+											{/* {stats?.recentActivity.map((log) => (
 												<TableRow
 													key={log.id}
 													className="hover:bg-slate-50/50 transition-colors">
@@ -169,7 +169,7 @@ export const DashboardPage: React.FC = () => {
 														Tidak ada aktivitas yang tercatat hari ini.
 													</TableCell>
 												</TableRow>
-											)}
+											)} */}
 										</TableBody>
 									</Table>
 								</div>

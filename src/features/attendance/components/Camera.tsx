@@ -78,7 +78,7 @@ export const Camera: React.FC<CameraProps> = ({ onCapture, isLoading }) => {
 
 	return (
 		<Card className="p-4 flex flex-col items-center gap-4">
-			<div className="relative w-full max-w-md aspect-video bg-black rounded-lg overflow-hidden">
+			<div className="relative w-full max-w-md lg:aspect-video aspect-video h-96 bg-black rounded-lg overflow-hidden">
 				{cameraError ? (
 					<div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6 text-center bg-slate-900">
 						<p className="text-sm mb-4 text-slate-300">{cameraError}</p>
