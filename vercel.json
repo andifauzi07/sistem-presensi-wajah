@@ -1,6 +1,10 @@
 {
 	"routes": [
 		{
+			"src": "/models/(.*)",
+			"dest": "/models/$1"
+		},
+		{
 			"src": "/assets/(.*)",
 			"dest": "/assets/$1"
 		},
