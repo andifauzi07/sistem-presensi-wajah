@@ -16,6 +16,8 @@ export const createEmployee = async (payload: EmployeeInsert) => {
 };
 
 export const updateEmployee = async (payload: EmployeeUpdate) => {
+	if (!payload.id) throw new Error('gagal memperbarui karyawan: id tidak ditemukan');
+
 	const { data, error } = await supabase.from('employee').update(payload).eq('id', payload.id).select().single();
 
 	if (error) throw error;

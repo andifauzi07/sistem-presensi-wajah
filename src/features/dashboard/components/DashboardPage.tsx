@@ -1,5 +1,5 @@
 import React from 'react';
-// import { useDashboard } from '../hooks/useDashboard';
+import { useDashboard, useReportAttendance } from '@/features/dashboard/dashboard.hooks';
 import { useEmployees } from '@/features/employee/employee.hooks';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { EmployeeList } from '../../employee/components/EmployeeList';
 import { EmployeeForm } from '../../employee/components/EmployeeForm';
 
-import { generateAttendanceReport } from '../utils/reportGenerator';
+import { generateAttendanceReport, getStatus } from '../dashboard.utils';
 import { Users, UserCheck, FileText, LogOut, Activity, LayoutDashboard, Loader2, Clock } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -16,19 +16,15 @@ import { supabase } from '@/lib/supabase';
 import { useSession } from '@/features/auth/auth.hooks';
 
 export const DashboardPage: React.FC = () => {
-	// const { data: stats, isLoading: isStatsLoading } = useDashboard();
-	const { data: employees, isLoading } = useEmployees();
+	const { data: todayAttendance, isLoading: loadingAttendance } = useDashboard();
+	const { data: stats } = useReportAttendance();
+	const { data: employees, isLoading: loadingEmployee } = useEmployees();
 	const { data } = useSession();
+	console.log(todayAttendance);
 
 	const logout = async () => {
 		await supabase.auth.signOut();
 	};
-
-	// const handleGenerateReport = () => {
-	// 	if (employees && stats?.recentActivity) {
-	// 		generateAttendanceReport(employees, stats.recentActivity, new Date());
-	// 	}
-	// };
 
 	return (
 		<div className="min-h-screen bg-slate-50 flex flex-col">
@@ -49,7 +45,6 @@ export const DashboardPage: React.FC = () => {
 					<div className="flex items-center gap-4">
 						<div className="text-right hidden sm:block">
 							<p className="text-sm font-medium text-slate-900">{data?.user?.email}</p>
-							{/* <p className="text-xs text-slate-500">{user}</p> */}
 						</div>
 						<Button
 							variant="ghost"
@@ -70,7 +65,7 @@ export const DashboardPage: React.FC = () => {
 							<CardTitle className="text-sm font-medium text-slate-500">Total Pegawai</CardTitle>
 							<Users className="h-4 w-4 text-slate-400" />
 						</CardHeader>
-						{/* <CardContent>{isStatsLoading ? <Loader2 className="h-8 w-8 animate-spin text-slate-200" /> : <div className="text-3xl font-bold text-slate-900">{stats?.totalEmployees || 0}</div>}</CardContent> */}
+						<CardContent>{loadingEmployee ? <Loader2 className="h-8 w-8 animate-spin text-slate-200" /> : <div className="text-3xl font-bold text-slate-900">{employees?.length}</div>}</CardContent>
 					</Card>
 
 					<Card className="border-none shadow-sm hover:shadow-md transition-shadow">
@@ -78,7 +73,7 @@ export const DashboardPage: React.FC = () => {
 							<CardTitle className="text-sm font-medium text-slate-500">Hadir Hari Ini</CardTitle>
 							<UserCheck className="h-4 w-4 text-green-500" />
 						</CardHeader>
-						{/* <CardContent>{isStatsLoading ? <Loader2 className="h-8 w-8 animate-spin text-slate-200" /> : <div className="text-3xl font-bold text-slate-900">{stats?.presentToday || 0}</div>}</CardContent> */}
+						<CardContent>{loadingAttendance ? <Loader2 className="h-8 w-8 animate-spin text-slate-200" /> : <div className="text-3xl font-bold text-slate-900">{todayAttendance?.length || 0}</div>}</CardContent>
 					</Card>
 
 					<Card className="border-none shadow-sm hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
@@ -140,19 +135,19 @@ export const DashboardPage: React.FC = () => {
 											</TableRow>
 										</TableHeader>
 										<TableBody>
-											{/* {stats?.recentActivity.map((log) => (
+											{todayAttendance?.map((log) => (
 												<TableRow
 													key={log.id}
 													className="hover:bg-slate-50/50 transition-colors">
-													<TableCell className="font-medium text-slate-900">{log.employeeName}</TableCell>
+													<TableCell className="font-medium text-slate-900">{log?.employee?.nama}</TableCell>
 													<TableCell>
 														<Badge
-															variant={log.type === 'check-in' ? 'default' : 'secondary'}
-															className={log.type === 'check-in' ? 'bg-green-100 text-green-700 hover:bg-green-100 border-none' : 'bg-orange-100 text-orange-700 hover:bg-orange-100 border-none'}>
-															{log.type.toUpperCase()}
+															variant={getStatus(log) === 'hadir' ? 'default' : 'secondary'}
+															className={getStatus(log) === 'hadir' ? 'bg-green-100 text-green-700 hover:bg-green-100 border-none' : 'bg-orange-100 text-orange-700 hover:bg-orange-100 border-none'}>
+															{getStatus(log)}
 														</Badge>
 													</TableCell>
-													<TableCell className="text-slate-500">{format(new Date(log.timestamp), 'HH:mm:ss')}</TableCell>
+													<TableCell className="text-slate-500">{format(new Date(log.check_in), 'HH:mm:ss')}</TableCell>
 													<TableCell>
 														<div className="flex items-center gap-2">
 															<div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
@@ -161,7 +156,7 @@ export const DashboardPage: React.FC = () => {
 													</TableCell>
 												</TableRow>
 											))}
-											{(!stats?.recentActivity || stats.recentActivity.length === 0) && (
+											{(!todayAttendance || todayAttendance.length === 0) && (
 												<TableRow>
 													<TableCell
 														colSpan={4}
@@ -169,7 +164,7 @@ export const DashboardPage: React.FC = () => {
 														Tidak ada aktivitas yang tercatat hari ini.
 													</TableCell>
 												</TableRow>
-											)} */}
+											)}
 										</TableBody>
 									</Table>
 								</div>

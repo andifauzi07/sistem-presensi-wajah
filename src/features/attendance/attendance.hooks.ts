@@ -13,11 +13,13 @@ export const useAttendance = () => {
 
 	const mutation = useMutation({
 		mutationFn: (descriptor: number[]) => submitAttendanceByDescriptor(descriptor),
-		onSuccess: (result) => {
-			// Dashboard perlu refresh saat check-in/out berhasil ditulis.
-			if (result.type === 'check-in' || result.type === 'check-out') {
-				queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
-			}
+		onSuccess: async (result) => {
+			await queryClient.refetchQueries({
+				queryKey: ['dashboard'],
+				exact: true,
+			});
+
+			console.log('Dashboard direfresh !');
 
 			switch (result.type) {
 				case 'check-in':

@@ -5,15 +5,12 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { LogIn } from 'lucide-react';
-import { useEmployees } from '@/features/employee/employee.hooks';
 
 export const AttendancePage: React.FC = () => {
 	const { mutate, isPending } = useAttendance();
-	const { data } = useEmployees();
 	const handleCapture = (descriptor: number[]) => {
 		mutate(descriptor);
 	};
-	console.log(data);
 
 	return (
 		<div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
@@ -21,6 +18,11 @@ export const AttendancePage: React.FC = () => {
 				<div className="text-center space-y-2">
 					<h1 className="text-4xl font-bold tracking-tight text-slate-900">Sistem Presensi Pegawai</h1>
 					<p className="text-slate-500">RSUD La Mappapenning</p>
+					<img
+						src="/image.png"
+						alt="RSUD La Mappapenning"
+						className="h-20 w-20 bg-transparent mx-auto"
+					/>
 				</div>
 
 				<Card className="border-none shadow-xl">

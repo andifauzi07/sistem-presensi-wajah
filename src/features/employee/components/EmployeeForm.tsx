@@ -23,7 +23,7 @@ export const EmployeeForm: React.FC = () => {
 			nama: name,
 			email,
 			jabatan: position,
-			descriptor: faceDescriptor,
+			descriptor: toPgVector(faceDescriptor),
 		});
 		setIsOpen(false);
 		resetForm();
