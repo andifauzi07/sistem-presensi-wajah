@@ -21,11 +21,9 @@ export const Camera: React.FC<CameraProps> = ({ onCapture, isLoading }) => {
 		const init = async () => {
 			try {
 				await faceApiService.loadModels();
-				console.log('model berhasil dimuat');
 				setIsModelLoaded(true);
 				await startCamera();
 			} catch (error) {
-				console.log('Gagal Memuat Model');
 				setCameraError('Gagal memuat model pendeteksi wajah.');
 			}
 		};
@@ -67,7 +65,7 @@ export const Camera: React.FC<CameraProps> = ({ onCapture, isLoading }) => {
 				const descriptor = faceApiService.getDescriptor(detection);
 				onCapture(descriptor);
 			} else {
-				toast.error('gagal mendeteksi wajah');
+				toast.error('gagal mendeteksi wajah, pastikan wajah terlihat jelas di kamera');
 			}
 		} catch (error) {
 			console.error('Detection error', error);

@@ -22,7 +22,7 @@ export const euclideanDistance = (a: number[], b: number[]) => {
 };
 
 export const toPgVector = (arr: number[]) => `[${arr.join(',')}]`;
-const fromPgVector = (value: any): number[] => {
+export const fromPgVector = (value: any): number[] => {
 	if (Array.isArray(value)) return value;
 
 	return value

@@ -3,8 +3,14 @@ import { Database, TablesInsert, TablesUpdate } from '../../../database.types';
 type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
 
 export type Employee = Tables<'employee'>;
-export type EmployeeInsert = TablesInsert<'employee'>;
+// export type EmployeeInsert = TablesInsert<'employee'>;
 export type EmployeeUpdate = TablesUpdate<'employee'>;
+export type EmployeeInsert = {
+	nama: string;
+	email: string;
+	jabatan: string;
+	descriptor: number[]; // override dari string → number[]
+};
 
 export type Attendance = Tables<'attendance'>;
 

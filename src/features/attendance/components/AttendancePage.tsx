@@ -5,13 +5,15 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { LogIn } from 'lucide-react';
+import { useEmployees } from '@/features/employee/employee.hooks';
 
 export const AttendancePage: React.FC = () => {
 	const { mutate, isPending } = useAttendance();
-
+	const { data } = useEmployees();
 	const handleCapture = (descriptor: number[]) => {
 		mutate(descriptor);
 	};
+	console.log(data);
 
 	return (
 		<div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
