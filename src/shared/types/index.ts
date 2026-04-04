@@ -19,3 +19,10 @@ export type AttendanceSubmitResult = {
 	type: 'check-in' | 'check-out' | 'already-completed' | 'unknown';
 	employee?: Employee;
 };
+
+export type Schedule = Tables<'schedule'>;
+export type ScheduleInsert = TablesInsert<'schedule'>;
+export type ScheduleUpdate = TablesUpdate<'schedule'>;
+
+export type Shift = Tables<'shift'>;
+export type ShiftType = Database['public']['Enums']['shift_type'];

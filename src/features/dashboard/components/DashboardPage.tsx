@@ -8,12 +8,14 @@ import { EmployeeList } from '../../employee/components/EmployeeList';
 import { EmployeeForm } from '../../employee/components/EmployeeForm';
 
 import { generateAttendanceReport, getStatus } from '../dashboard.utils';
-import { Users, UserCheck, FileText, LogOut, Activity, LayoutDashboard, Loader2, Clock } from 'lucide-react';
+import { Users, UserCheck, FileText, LogOut, Activity, LayoutDashboard, Loader2, Clock, Plus, Calendar1 } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { supabase } from '@/lib/supabase';
 import { useSession } from '@/features/auth/auth.hooks';
+import { ScheduleList } from '@/features/schedule/components/ScheduleList';
+import { ScheduleForm } from '@/features/schedule/components/ScheduleForm';
 
 export const DashboardPage: React.FC = () => {
 	const { data: todayAttendance, isLoading: loadingAttendance } = useDashboard();
@@ -104,13 +106,19 @@ export const DashboardPage: React.FC = () => {
 								value="activity"
 								className="data-[state=active]:bg-slate-900 data-[state=active]:text-white">
 								<Clock className="mr-2 h-4 w-4" />
-								Aktifitas Hari Ini
+								Aktifitas
 							</TabsTrigger>
 							<TabsTrigger
 								value="employees"
 								className="data-[state=active]:bg-slate-900 data-[state=active]:text-white">
 								<Users className="mr-2 h-4 w-4" />
-								Manajemen Pegawai
+								Pegawai
+							</TabsTrigger>
+							<TabsTrigger
+								value="schedules"
+								className="data-[state=active]:bg-slate-900 data-[state=active]:text-white">
+								<Calendar1 className="mr-2 h-4 w-4" />
+								Jadwal
 							</TabsTrigger>
 						</TabsList>
 					</div>
@@ -120,8 +128,8 @@ export const DashboardPage: React.FC = () => {
 						className="space-y-4">
 						<Card className="border-none shadow-sm">
 							<CardHeader>
-								<CardTitle>Catatan Kehadiran Terbaru</CardTitle>
-								<CardDescription>Pembaruan langsung mengenai waktu masuk dan keluar karyawan.</CardDescription>
+								<CardTitle>Aktifitas Hari Ini</CardTitle>
+								<CardDescription>Daftar Pegawai yang melakukan presensi.</CardDescription>
 							</CardHeader>
 							<CardContent>
 								<div className="border rounded-lg overflow-hidden">
@@ -147,7 +155,8 @@ export const DashboardPage: React.FC = () => {
 															{getStatus(log)}
 														</Badge>
 													</TableCell>
-													<TableCell className="text-slate-500">{format(new Date(log.check_in), 'HH:mm:ss')}</TableCell>
+													{/* <TableCell className="text-slate-500">{format(new Date(log?.check_in), 'HH:mm:ss')}</TableCell> */}
+													<TableCell className="text-slate-500">{log.check_in}</TableCell>
 													<TableCell>
 														<div className="flex items-center gap-2">
 															<div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
@@ -171,17 +180,30 @@ export const DashboardPage: React.FC = () => {
 							</CardContent>
 						</Card>
 					</TabsContent>
-
 					<TabsContent value="employees">
 						<Card className="border-none shadow-sm">
 							<CardHeader className="flex flex-row items-center justify-between">
 								<div>
-									<CardTitle>Direktori Karyawan</CardTitle>
-									<CardDescription>Kelola karyawan organisasi Anda dan profil wajah mereka.</CardDescription>
+									<CardTitle>Pegawai</CardTitle>
+									<CardDescription>Kelola pegawai Anda.</CardDescription>
 								</div>
 							</CardHeader>
 							<CardContent>
 								<EmployeeList />
+							</CardContent>
+						</Card>
+					</TabsContent>
+					<TabsContent value="schedules">
+						<Card className="border-none shadow-sm">
+							<CardHeader className="flex flex-row items-center justify-between">
+								<div>
+									<CardTitle>Jadwal</CardTitle>
+									<CardDescription>Kelola Jadwal Pegawai.</CardDescription>
+								</div>
+								<ScheduleForm />
+							</CardHeader>
+							<CardContent>
+								<ScheduleList />
 							</CardContent>
 						</Card>
 					</TabsContent>

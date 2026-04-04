@@ -5,6 +5,11 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
+export function capitalize(str: string | null): string {
+	if (!str) return '';
+	return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 // Euclidean Distance untuk matching descriptor wajah.
 // Jika panjang array tidak sama atau ada nilai non-finite, kembalikan `Infinity`
 // agar tidak pernah dianggap match.

@@ -16,28 +16,34 @@ export type Database = {
     Tables: {
       attendance: {
         Row: {
-          check_in: string
-          check_out: string
+          check_in: string | null
+          check_out: string | null
           created_at: string
           date: string
           employee_id: string
           id: string
+          schedule_id: string
+          status: Database["public"]["Enums"]["attendance_status"] | null
         }
         Insert: {
-          check_in?: string
-          check_out?: string
+          check_in?: string | null
+          check_out?: string | null
           created_at?: string
           date: string
           employee_id: string
           id?: string
+          schedule_id: string
+          status?: Database["public"]["Enums"]["attendance_status"] | null
         }
         Update: {
-          check_in?: string
-          check_out?: string
+          check_in?: string | null
+          check_out?: string | null
           created_at?: string
           date?: string
           employee_id?: string
           id?: string
+          schedule_id?: string
+          status?: Database["public"]["Enums"]["attendance_status"] | null
         }
         Relationships: [
           {
@@ -45,6 +51,13 @@ export type Database = {
             columns: ["employee_id"]
             isOneToOne: true
             referencedRelation: "employee"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_schedule_id_fkey"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "schedule"
             referencedColumns: ["id"]
           },
         ]
@@ -76,6 +89,69 @@ export type Database = {
         }
         Relationships: []
       }
+      schedule: {
+        Row: {
+          created_at: string
+          employee_id: string
+          id: string
+          shift_id: string
+        }
+        Insert: {
+          created_at?: string
+          employee_id: string
+          id?: string
+          shift_id: string
+        }
+        Update: {
+          created_at?: string
+          employee_id?: string
+          id?: string
+          shift_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employee_schedule_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employee"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_schedule_shift_id_fkey"
+            columns: ["shift_id"]
+            isOneToOne: false
+            referencedRelation: "shift"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shift: {
+        Row: {
+          checkin_time: string
+          checkout_time: string
+          created_at: string
+          id: string
+          name: Database["public"]["Enums"]["shift_type"] | null
+          overdue: number
+        }
+        Insert: {
+          checkin_time: string
+          checkout_time: string
+          created_at?: string
+          id?: string
+          name?: Database["public"]["Enums"]["shift_type"] | null
+          overdue: number
+        }
+        Update: {
+          checkin_time?: string
+          checkout_time?: string
+          created_at?: string
+          id?: string
+          name?: Database["public"]["Enums"]["shift_type"] | null
+          overdue?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -84,7 +160,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      attendance_status: "Hadir" | "Terlambat" | "Izin" | "Alfa"
+      shift_type: "Pagi" | "Sore" | "Malam"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -211,6 +288,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      attendance_status: ["Hadir", "Terlambat", "Izin", "Alfa"],
+      shift_type: ["Pagi", "Sore", "Malam"],
+    },
   },
 } as const

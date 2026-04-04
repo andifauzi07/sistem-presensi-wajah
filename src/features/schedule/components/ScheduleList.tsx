@@ -1,26 +1,15 @@
-import React from 'react';
-import { useEmployees } from '../employee.hooks';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Trash2, User, Loader2 } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Loader2, Trash2, User } from 'lucide-react';
+import { useSchedule } from '../schedule.hooks';
+import { capitalize } from '@/lib/utils';
 
-export const EmployeeList: React.FC = () => {
-	const { data: employees, isLoading, delete: deleteMutation } = useEmployees();
+export const ScheduleList: React.FC = () => {
+	const { schedules, schedulesLoading, schedulesByShift, schedulesByShiftLoading, create } = useSchedule();
 
-	if (isLoading) {
-		return (
-			<div className="space-y-4">
-				{[1, 2, 3].map((i) => (
-					<Skeleton
-						key={i}
-						className="h-16 w-full"
-					/>
-				))}
-			</div>
-		);
-	}
+	console.log('schedules: ', schedules);
+	console.log('schedules by shift: ', schedulesByShift);
 
 	return (
 		<div className="border rounded-lg bg-white overflow-hidden">
@@ -29,15 +18,16 @@ export const EmployeeList: React.FC = () => {
 					<TableRow className="bg-slate-50/50">
 						<TableHead className="w-20">Profile</TableHead>
 						<TableHead>Nama</TableHead>
-						<TableHead>Email</TableHead>
-						<TableHead>Bergabung Pada</TableHead>
+						<TableHead>Jabatan</TableHead>
+						<TableHead>Shift</TableHead>
+						<TableHead>Masuk</TableHead>
 						{/* <TableHead className="text-right">Aksi</TableHead> */}
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{employees?.map((employee) => (
+					{schedules?.map((schedule) => (
 						<TableRow
-							key={employee.id}
+							key={schedule.id}
 							className="hover:bg-slate-50/50 transition-colors">
 							<TableCell>
 								<Avatar className="h-10 w-10 border-2 border-slate-100">
@@ -46,27 +36,28 @@ export const EmployeeList: React.FC = () => {
 									</AvatarFallback>
 								</Avatar>
 							</TableCell>
-							<TableCell className="font-medium text-slate-900">{employee.nama}</TableCell>
-							<TableCell className="text-slate-500">{employee.email}</TableCell>
-							<TableCell className="text-slate-500">{new Date(employee.created_at).toLocaleDateString()}</TableCell>
-							<TableCell className="text-right">
+							<TableCell className="font-medium text-slate-900">{capitalize(schedule.employee.nama)}</TableCell>
+							<TableCell className="text-slate-500">{capitalize(schedule.employee?.jabatan)}</TableCell>
+							<TableCell className="text-slate-500">{schedule.shift.name}</TableCell>
+							<TableCell className="text-slate-500">{schedule.shift.checkin_time}</TableCell>
+							{/* <TableCell className="text-right">
 								<Button
 									variant="ghost"
 									size="icon"
 									className="text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-									onClick={() => deleteMutation.mutate(employee.id)}
+									onClick={() => deleteMutation.mutate(schedule.id)}
 									disabled={deleteMutation.isPending}>
 									{deleteMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
 								</Button>
-							</TableCell>
+							</TableCell> */}
 						</TableRow>
 					))}
-					{employees?.length === 0 && (
+					{schedules?.length === 0 && (
 						<TableRow>
 							<TableCell
 								colSpan={5}
 								className="h-32 text-center text-slate-500">
-								No employees registered yet.
+								No schedules registered yet.
 							</TableCell>
 						</TableRow>
 					)}
