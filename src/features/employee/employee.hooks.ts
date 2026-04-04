@@ -25,7 +25,7 @@ export const useEmployees = () => {
 	const deleteMutation = useMutation({
 		mutationFn: (id: string) => deleteEmployee(id),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['employees'] });
+			queryClient.invalidateQueries({ queryKey: ['employees'], exact: false });
 			toast.success('Berhasil Menghapus Pegawai');
 		},
 		onError: (error: any) => {

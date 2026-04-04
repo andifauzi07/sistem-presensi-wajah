@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase';
 import { ScheduleInsert, ShiftType } from '@/shared/types';
+import { toast } from 'sonner';
 
 export const getSchedules = async () => {
 	const { data, error } = await supabase.from('schedule').select(
@@ -15,7 +16,8 @@ export const getSchedules = async () => {
 				checkin_time,
 				checkout_time,
 				overdue
-			)
+			),
+			date
     `,
 	);
 
@@ -56,6 +58,12 @@ export const createSchedule = async (schedule: ScheduleInsert) => {
 	if (error) throw error;
 
 	return data;
+};
+
+export const deleteSchedule = async (id: string) => {
+	const { error } = await supabase.from('schedule').delete().eq('id', id);
+
+	if (error) throw error;
 };
 
 export const getShifts = async () => {

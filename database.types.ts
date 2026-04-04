@@ -92,35 +92,38 @@ export type Database = {
       schedule: {
         Row: {
           created_at: string
+          date: string
           employee_id: string
           id: string
           shift_id: string
         }
         Insert: {
           created_at?: string
+          date?: string
           employee_id: string
           id?: string
           shift_id: string
         }
         Update: {
           created_at?: string
+          date?: string
           employee_id?: string
           id?: string
           shift_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "employee_schedule_employee_id_fkey"
-            columns: ["employee_id"]
-            isOneToOne: false
-            referencedRelation: "employee"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "employee_schedule_shift_id_fkey"
             columns: ["shift_id"]
             isOneToOne: false
             referencedRelation: "shift"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "schedule_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employee"
             referencedColumns: ["id"]
           },
         ]

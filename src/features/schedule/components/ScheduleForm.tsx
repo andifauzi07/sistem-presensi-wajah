@@ -34,10 +34,9 @@ export const ScheduleForm: React.FC = () => {
 			employee_id: selectedEmployee.id,
 			shift_id: selectedShift.id,
 		});
-		if (create.isSuccess) {
-			setIsOpen(false);
-			resetForm();
-		}
+
+		resetForm();
+		setIsOpen(false);
 	};
 
 	const resetForm = () => {
@@ -67,7 +66,7 @@ export const ScheduleForm: React.FC = () => {
 					<form
 						onSubmit={handleSubmit}
 						className="space-y-2">
-						<Field className="w-full max-w-xs">
+						<Field className="w-full">
 							<FieldLabel>Pegawai</FieldLabel>
 							<Select
 								onValueChange={(value) => {
@@ -89,7 +88,7 @@ export const ScheduleForm: React.FC = () => {
 							</Select>
 						</Field>
 						<div className="space-y-2">
-							<Field className="w-full max-w-xs">
+							<Field className="w-full">
 								<FieldLabel className="text-center">Shift</FieldLabel>
 								<Select
 									onValueChange={(value) => {

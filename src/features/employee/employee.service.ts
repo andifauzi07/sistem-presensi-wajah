@@ -25,7 +25,7 @@ export const updateEmployee = async (payload: EmployeeUpdate) => {
 };
 
 export const deleteEmployee = async (id: string) => {
-	const { error } = await supabase.from('employee').delete().eq('id', id);
+	const { data, error } = await supabase.from('employee').delete().eq('id', id);
 
 	if (error) throw error;
 };

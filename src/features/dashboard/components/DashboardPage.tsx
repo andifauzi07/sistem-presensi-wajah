@@ -22,7 +22,6 @@ export const DashboardPage: React.FC = () => {
 	const { data: stats } = useReportAttendance();
 	const { data: employees, isLoading: loadingEmployee } = useEmployees();
 	const { data } = useSession();
-	console.log(todayAttendance);
 
 	const logout = async () => {
 		await supabase.auth.signOut();
@@ -98,7 +97,7 @@ export const DashboardPage: React.FC = () => {
 
 				{/* Main Content Tabs */}
 				<Tabs
-					defaultValue="activity"
+					defaultValue="employees"
 					className="space-y-6">
 					<div className="flex items-center justify-between">
 						<TabsList className="bg-white border border-slate-200 p-1">
