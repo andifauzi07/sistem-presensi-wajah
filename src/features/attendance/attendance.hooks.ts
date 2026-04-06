@@ -18,14 +18,13 @@ export const useAttendance = () => {
 				queryKey: ['dashboard'],
 				exact: true,
 			});
-
-			console.log('Dashboard direfresh !');
+			console.log('result :', result);
 
 			switch (result.type) {
-				case 'check-in':
+				case 'check-in-success':
 					toast.success(`Check-in berhasil untuk ${result.employee?.nama ?? 'karyawan'}`);
 					break;
-				case 'check-out':
+				case 'check-out-success':
 					toast.success(`Check-out berhasil untuk ${result.employee?.nama ?? 'karyawan'}`);
 					break;
 				case 'already-completed':

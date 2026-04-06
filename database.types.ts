@@ -113,17 +113,17 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "employee_schedule_shift_id_fkey"
-            columns: ["shift_id"]
-            isOneToOne: false
-            referencedRelation: "shift"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "schedule_employee_id_fkey"
             columns: ["employee_id"]
             isOneToOne: false
             referencedRelation: "employee"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "schedule_shift_id_fkey"
+            columns: ["shift_id"]
+            isOneToOne: false
+            referencedRelation: "shift"
             referencedColumns: ["id"]
           },
         ]
@@ -160,7 +160,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      do_attendance: { Args: { p_employee_id: string }; Returns: string }
     }
     Enums: {
       attendance_status: "Hadir" | "Terlambat" | "Izin" | "Alfa"
