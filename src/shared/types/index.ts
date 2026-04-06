@@ -3,16 +3,22 @@ import { Database, TablesInsert, TablesUpdate } from '../../../database.types';
 type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
 
 export type Employee = Tables<'employee'>;
+export type Schedule = Tables<'schedule'>;
+export type Shift = Tables<'shift'>;
+
 export type EmployeeInsert = TablesInsert<'employee'>;
 export type EmployeeUpdate = TablesUpdate<'employee'>;
 type EmployeeBasic = {
-	id: string;
+	jabatan: string;
 	nama: string;
 };
 
 export type Attendance = Tables<'attendance'>;
 export type AttendanceDetail = Attendance & {
 	employee: EmployeeBasic;
+	schedule: Schedule & {
+		shift: Shift;
+	};
 };
 
 export type AttendanceSubmitResult = {
@@ -20,9 +26,7 @@ export type AttendanceSubmitResult = {
 	employee?: Employee;
 };
 
-export type Schedule = Tables<'schedule'>;
 export type ScheduleInsert = TablesInsert<'schedule'>;
 export type ScheduleUpdate = TablesUpdate<'schedule'>;
 
-export type Shift = Tables<'shift'>;
 export type ShiftType = Database['public']['Enums']['shift_type'];

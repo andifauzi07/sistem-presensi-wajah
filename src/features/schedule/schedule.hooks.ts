@@ -35,7 +35,6 @@ export const useSchedule = (shift?: ShiftType) => {
 	const deleteMutation = useMutation({
 		mutationFn: (id: string) => deleteSchedule(id),
 		onSuccess: () => {
-			console.log('Schedule deleted successfully');
 			queryClient.invalidateQueries({ queryKey: ['schedule'] });
 			toast.success('Jadwal berhasil dihapus');
 		},

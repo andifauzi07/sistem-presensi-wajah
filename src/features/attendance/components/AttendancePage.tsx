@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import { LogIn } from 'lucide-react';
 
 export const AttendancePage: React.FC = () => {
-	const { mutate, isPending } = useAttendance();
+	const { data: attendance, isLoading: isAttendanceLoading, mutate, isPending } = useAttendance();
+
 	const handleCapture = (descriptor: number[]) => {
 		mutate(descriptor);
 	};

@@ -16,15 +16,19 @@ export const getTodayAttendance = async (): Promise<AttendanceDetail[]> => {
 		.from('attendance')
 		.select(
 			`
-     id, 
-      check_in, 
-      check_out, 
-      date,
-      employee (
-        id,
-        nama
-      )
-    `,
+			id,
+			employee (
+        nama,
+				jabatan
+      ),
+			check_in,
+			check_out,
+			schedule(
+				shift (name, checkin_time, checkout_time, overdue)
+			),
+			status,
+			check_in
+		`,
 		)
 		.eq('date', today);
 

@@ -1,13 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { getEmployeesForRecognition, submitAttendanceByDescriptor } from './attendance.service';
+import { getEmployeesAttendance, submitAttendanceByDescriptor } from './attendance.service';
 
 export const useAttendance = () => {
 	const queryClient = useQueryClient();
 
-	const employeesQuery = useQuery({
-		queryKey: ['employees-for-face-recognition'],
-		queryFn: getEmployeesForRecognition,
+	const attendance = useQuery({
+		queryKey: ['attendance'],
+		queryFn: getEmployeesAttendance,
 		staleTime: 0,
 	});
 
@@ -18,7 +18,6 @@ export const useAttendance = () => {
 				queryKey: ['dashboard'],
 				exact: true,
 			});
-			console.log('result :', result);
 
 			switch (result.type) {
 				case 'check-in-success':
@@ -33,6 +32,11 @@ export const useAttendance = () => {
 				case 'unknown':
 					toast.error('Wajah tidak dikenali');
 					break;
+				case 'too-early-to-checkout':
+					toast.error('Belum waktunya untuk check-out');
+					break;
+				case 'no-schedule':
+					toast.error(`Hai ${result.employee?.nama}. Anda belum memiliki jadwal, hubungi admin untuk penjadwalan`);
 			}
 		},
 		onError: (error: any) => {
@@ -41,7 +45,8 @@ export const useAttendance = () => {
 	});
 
 	return {
+		...attendance,
 		mutate: mutation.mutate,
-		isPending: mutation.isPending || employeesQuery.isLoading,
+		isPending: mutation.isPending || attendance.isLoading,
 	};
 };

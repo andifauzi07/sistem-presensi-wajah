@@ -8,14 +8,16 @@ import { EmployeeList } from '../../employee/components/EmployeeList';
 import { EmployeeForm } from '../../employee/components/EmployeeForm';
 
 import { generateAttendanceReport, getStatus } from '../dashboard.utils';
-import { Users, UserCheck, FileText, LogOut, Activity, LayoutDashboard, Loader2, Clock, Plus, Calendar1 } from 'lucide-react';
+import { Users, UserCheck, FileText, LogOut, Activity, Loader2, Clock, Plus, Calendar1 } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { format } from 'date-fns';
 import { supabase } from '@/lib/supabase';
 import { useSession } from '@/features/auth/auth.hooks';
 import { ScheduleList } from '@/features/schedule/components/ScheduleList';
 import { ScheduleForm } from '@/features/schedule/components/ScheduleForm';
+import { cn } from '@/lib/utils';
+import { format, parse } from 'date-fns';
+import { TableSkeleton } from '@/components/ui/table-skeleton';
 
 export const DashboardPage: React.FC = () => {
 	const { data: todayAttendance, isLoading: loadingAttendance } = useDashboard();
@@ -85,6 +87,7 @@ export const DashboardPage: React.FC = () => {
 						<CardContent className="flex gap-2">
 							<Button
 								// onClick={handleGenerateReport}
+								disabled
 								variant="outline"
 								className="flex-1 border-slate-200 hover:bg-slate-50">
 								<FileText className="mr-2 h-4 w-4" />
@@ -97,7 +100,7 @@ export const DashboardPage: React.FC = () => {
 
 				{/* Main Content Tabs */}
 				<Tabs
-					defaultValue="employees"
+					defaultValue="activity"
 					className="space-y-6">
 					<div className="flex items-center justify-between">
 						<TabsList className="bg-white border border-slate-200 p-1">
@@ -135,36 +138,55 @@ export const DashboardPage: React.FC = () => {
 									<Table>
 										<TableHeader>
 											<TableRow className="bg-slate-50/50">
-												<TableHead>Pegawai</TableHead>
-												<TableHead>Tipe</TableHead>
-												<TableHead>Waktu</TableHead>
+												<TableHead>Nama Pegawai</TableHead>
+												<TableHead>Jadwal Shift</TableHead>
+												<TableHead>Waktu Shift</TableHead>
+												<TableHead>Datang</TableHead>
+												<TableHead>Pulang</TableHead>
+												<TableHead>Keterangan</TableHead>
 												<TableHead>Status</TableHead>
 											</TableRow>
 										</TableHeader>
 										<TableBody>
-											{todayAttendance?.map((log) => (
-												<TableRow
-													key={log.id}
-													className="hover:bg-slate-50/50 transition-colors">
-													<TableCell className="font-medium text-slate-900">{log?.employee?.nama}</TableCell>
-													<TableCell>
-														<Badge
-															variant={getStatus(log) === 'hadir' ? 'default' : 'secondary'}
-															className={getStatus(log) === 'hadir' ? 'bg-green-100 text-green-700 hover:bg-green-100 border-none' : 'bg-orange-100 text-orange-700 hover:bg-orange-100 border-none'}>
-															{getStatus(log)}
-														</Badge>
-													</TableCell>
-													{/* <TableCell className="text-slate-500">{format(new Date(log?.check_in), 'HH:mm:ss')}</TableCell> */}
-													<TableCell className="text-slate-500">{log.check_in}</TableCell>
-													<TableCell>
-														<div className="flex items-center gap-2">
-															<div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-															<span className="text-xs text-slate-400">Verified</span>
-														</div>
-													</TableCell>
-												</TableRow>
-											))}
-											{(!todayAttendance || todayAttendance.length === 0) && (
+											{loadingAttendance ? (
+												<TableSkeleton
+													rows={3}
+													columns={7}
+												/>
+											) : (
+												todayAttendance?.map((log) => (
+													<TableRow
+														key={log.id}
+														className="hover:bg-slate-50/50 transition-colors">
+														<TableCell className="font-medium text-slate-900">{log?.employee?.nama}</TableCell>
+
+														<TableCell className="text-slate-500">{`${format(parse(log.schedule?.shift?.checkin_time, 'HH:mm:ss', new Date()), 'HH:mm')} - ${format(parse(log.schedule?.shift?.checkout_time, 'HH:mm:ss', new Date()), 'HH:mm')}`}</TableCell>
+														<TableCell className="text-slate-500">{log.schedule.shift.name}</TableCell>
+														<TableCell className="text-slate-500">{log.check_in ? format(new Date(log.check_in), 'HH:mm:ss') : '-'}</TableCell>
+														<TableCell className="text-slate-500">{log.check_out ? format(new Date(log.check_out), 'HH:mm:ss') : '-'}</TableCell>
+
+														<TableCell>
+															<Badge
+																variant={getStatus(log) === 'hadir' ? 'default' : 'secondary'}
+																className={getStatus(log) === 'hadir' ? 'bg-green-100 text-green-700 hover:bg-green-100 border-none' : 'bg-orange-100 text-orange-700 hover:bg-orange-100 border-none'}>
+																{getStatus(log)}
+															</Badge>
+														</TableCell>
+
+														<TableCell>
+															<div className="flex items-center gap-2">
+																<Badge
+																	variant={log.status === 'Hadir' ? 'outline' : 'destructive'}
+																	className={cn('text-xs font-medium', log.status === 'Terlambat' ? 'text-red-600' : 'text-slate-400')}>
+																	<div className={cn('h-2 w-2 rounded-full animate-pulse', log.status === 'Hadir' ? 'bg-green-500' : log.status === 'Terlambat' ? 'bg-red-500' : log.status === 'Izin' ? 'bg-blue-500' : 'bg-slate-300')} />
+																	{log.status}
+																</Badge>
+															</div>
+														</TableCell>
+													</TableRow>
+												))
+											)}
+											{todayAttendance?.length === 0 && (
 												<TableRow>
 													<TableCell
 														colSpan={4}

@@ -37,6 +37,6 @@ export const generateAttendanceReport = (employees: Employee[], logs: Attendance
 
 export const getStatus = (item: Attendance): string => {
 	if (item.check_in && item.check_out) return 'pulang';
-	if (item.check_in && !item.check_out) return 'hadir';
+	if (item.check_in && !item.check_out) return 'masuk';
 	return 'alpa';
 };
