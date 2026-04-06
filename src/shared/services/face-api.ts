@@ -4,11 +4,16 @@ const MODEL_URL = '/models';
 
 export const faceApiService = {
 	loadModels: async () => {
-		await Promise.all([faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL), faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL), faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)]);
+		await Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL), faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL), faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)]);
 	},
 
 	detectFace: async (videoElement: HTMLVideoElement) => {
-		const detection = await faceapi.detectSingleFace(videoElement).withFaceLandmarks().withFaceDescriptor();
+		const options = new faceapi.TinyFaceDetectorOptions({
+			inputSize: 416,
+			scoreThreshold: 0.5,
+		});
+
+		const detection = await faceapi.detectSingleFace(videoElement, options).withFaceLandmarks().withFaceDescriptor();
 
 		return detection;
 	},
