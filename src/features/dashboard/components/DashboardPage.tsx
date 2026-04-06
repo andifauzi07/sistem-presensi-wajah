@@ -189,7 +189,7 @@ export const DashboardPage: React.FC = () => {
 											{todayAttendance?.length === 0 && (
 												<TableRow>
 													<TableCell
-														colSpan={4}
+														colSpan={7}
 														className="h-32 text-center text-slate-500">
 														Tidak ada aktivitas yang tercatat hari ini.
 													</TableCell>

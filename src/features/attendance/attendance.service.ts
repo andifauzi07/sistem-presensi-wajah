@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { Employee } from '@/shared/types';
+import { AttendanceDetail, Employee } from '@/shared/types';
 
 type EmployeeForRecognition = Pick<Employee, 'id' | 'nama' | 'descriptor' | 'email' | 'jabatan' | 'created_at'>;
 
@@ -40,5 +40,5 @@ export const getEmployeesAttendance = async () => {
 
 	if (error) throw error;
 
-	return data;
+	return data as unknown as AttendanceDetail[];
 };

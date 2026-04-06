@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { getEmployeesAttendance, submitAttendanceByDescriptor } from './attendance.service';
+import { useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export const useAttendance = () => {
 	const queryClient = useQueryClient();
@@ -10,6 +12,19 @@ export const useAttendance = () => {
 		queryFn: getEmployeesAttendance,
 		staleTime: 0,
 	});
+
+	useEffect(() => {
+		const channel = supabase
+			.channel('schema-db-changes')
+			.on('postgres_changes', { event: '*', schema: 'public', table: 'attendance' }, () => {
+				queryClient.invalidateQueries({ queryKey: ['attendance'] });
+			})
+			.subscribe();
+
+		return () => {
+			supabase.removeChannel(channel);
+		};
+	}, [queryClient]);
 
 	const mutation = useMutation({
 		mutationFn: (descriptor: number[]) => submitAttendanceByDescriptor(descriptor),

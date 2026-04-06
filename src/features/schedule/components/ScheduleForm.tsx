@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { useEmployees } from '@/features/employee/employee.hooks';
 import { Employee, Shift } from '@/shared/types';
+import { EmployeeCombobox } from './EmployeeCombobox';
 
 export const ScheduleForm: React.FC = () => {
 	const { create } = useSchedule();
@@ -17,6 +18,7 @@ export const ScheduleForm: React.FC = () => {
 
 	const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
 	const [selectedShift, setSelectedShift] = useState<Shift | null>(null);
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
@@ -68,24 +70,11 @@ export const ScheduleForm: React.FC = () => {
 						className="space-y-2">
 						<Field className="w-full">
 							<FieldLabel>Pegawai</FieldLabel>
-							<Select
-								onValueChange={(value) => {
-									const found = employees?.find((emp) => emp.id === value);
-									setSelectedEmployee(found || null);
-								}}>
-								<SelectTrigger>
-									<SelectValue placeholder="Pilih pegawai">{selectedEmployee?.nama}</SelectValue>
-								</SelectTrigger>
-								<SelectContent>
-									{employees?.map((employee) => (
-										<SelectItem
-											key={employee.id}
-											value={employee.id}>
-											{employee.nama}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
+							<EmployeeCombobox
+								items={employees}
+								selectedEmployee={selectedEmployee}
+								setSelectedEmployee={setSelectedEmployee}
+							/>
 						</Field>
 						<div className="space-y-2">
 							<Field className="w-full">
@@ -117,7 +106,7 @@ export const ScheduleForm: React.FC = () => {
 							className="w-full"
 							disabled={create.isPending}>
 							{create.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ClipboardClock className="mr-2 h-4 w-4" />}
-							{create.isPending ? 'Menambahkan...' : 'Tambahkan'}
+							{create.isPending ? '' : 'Tambahkan'}
 						</Button>
 					</form>
 				</div>

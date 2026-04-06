@@ -26,8 +26,8 @@ export const ScheduleList: React.FC = () => {
 				<TableBody>
 					{schedulesLoading || schedulesByShiftLoading ? (
 						<TableSkeleton
-							rows={5}
-							columns={5}
+							rows={3}
+							columns={7}
 							showAvatar
 						/>
 					) : (

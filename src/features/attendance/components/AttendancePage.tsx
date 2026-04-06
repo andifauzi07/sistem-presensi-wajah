@@ -5,6 +5,12 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { LogIn } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { TableSkeleton } from '@/components/ui/table-skeleton';
+import { Badge } from '@/components/ui/badge';
+import { getStatus } from '@/features/dashboard/dashboard.utils';
+import { format, parse } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 export const AttendancePage: React.FC = () => {
 	const { data: attendance, isLoading: isAttendanceLoading, mutate, isPending } = useAttendance();
@@ -26,6 +32,79 @@ export const AttendancePage: React.FC = () => {
 					/>
 				</div>
 
+				<Card className="border-none shadow-sm">
+					<CardHeader>
+						<CardTitle>Aktifitas Hari Ini</CardTitle>
+						<CardDescription>Daftar Pegawai yang melakukan presensi.</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<div className="border rounded-lg overflow-hidden">
+							<Table>
+								<TableHeader>
+									<TableRow className="bg-slate-50/50">
+										<TableHead>Nama Pegawai</TableHead>
+										<TableHead>Jadwal Shift</TableHead>
+										<TableHead>Waktu Shift</TableHead>
+										<TableHead>Datang</TableHead>
+										<TableHead>Pulang</TableHead>
+										<TableHead>Keterangan</TableHead>
+										<TableHead>Status</TableHead>
+									</TableRow>
+								</TableHeader>
+								<TableBody>
+									{isAttendanceLoading ? (
+										<TableSkeleton
+											rows={3}
+											columns={7}
+										/>
+									) : (
+										attendance?.map((log) => (
+											<TableRow
+												key={log.id}
+												className="hover:bg-slate-50/50 transition-colors">
+												<TableCell className="font-medium text-slate-900">{log?.employee?.nama}</TableCell>
+
+												<TableCell className="text-slate-500">{`${format(parse(log.schedule?.shift?.checkin_time, 'HH:mm:ss', new Date()), 'HH:mm')} - ${format(parse(log.schedule?.shift?.checkout_time, 'HH:mm:ss', new Date()), 'HH:mm')}`}</TableCell>
+												<TableCell className="text-slate-500">{log.schedule.shift.name}</TableCell>
+												<TableCell className="text-slate-500">{log.check_in ? format(new Date(log.check_in), 'HH:mm:ss') : '-'}</TableCell>
+												<TableCell className="text-slate-500">{log.check_out ? format(new Date(log.check_out), 'HH:mm:ss') : '-'}</TableCell>
+
+												<TableCell>
+													<Badge
+														variant={getStatus(log) === 'hadir' ? 'default' : 'secondary'}
+														className={getStatus(log) === 'hadir' ? 'bg-green-100 text-green-700 hover:bg-green-100 border-none' : 'bg-orange-100 text-orange-700 hover:bg-orange-100 border-none'}>
+														{getStatus(log)}
+													</Badge>
+												</TableCell>
+
+												<TableCell>
+													<div className="flex items-center gap-2">
+														<Badge
+															variant={log.status === 'Hadir' ? 'outline' : 'destructive'}
+															className={cn('text-xs font-medium', log.status === 'Terlambat' ? 'text-red-600' : 'text-slate-400')}>
+															<div className={cn('h-2 w-2 rounded-full animate-pulse', log.status === 'Hadir' ? 'bg-green-500' : log.status === 'Terlambat' ? 'bg-red-500' : log.status === 'Izin' ? 'bg-blue-500' : 'bg-slate-300')} />
+															{log.status}
+														</Badge>
+													</div>
+												</TableCell>
+											</TableRow>
+										))
+									)}
+									{attendance?.length === 0 && (
+										<TableRow>
+											<TableCell
+												colSpan={7}
+												className="h-32 text-center text-slate-500">
+												Tidak ada aktivitas yang tercatat hari ini.
+											</TableCell>
+										</TableRow>
+									)}
+								</TableBody>
+							</Table>
+						</div>
+					</CardContent>
+				</Card>
+
 				<Card className="border-none shadow-xl">
 					<CardHeader className="text-center">
 						<CardTitle>Verifikasi Kehadiran</CardTitle>
@@ -38,7 +117,6 @@ export const AttendancePage: React.FC = () => {
 						/>
 					</CardContent>
 				</Card>
-
 				<div className="flex justify-center">
 					<Link to="/login">
 						<Button
