@@ -1,7 +1,7 @@
 Demo Credentials:
 admin@example.com / admin123
 
-1. fitur jadwal shift oleh admin ✅
-2. keterangan status absensi ✅
-3. jadwal shift (pagi,sore,malam) ✅
-4. Catatan Kehadiran Terbaru (Halaman Utama)
+Revisi:
+
+1. Sebagai admin dapat menentukan jadwal shift per hari karyawan untuk 1 bulan kedepan
+2. Penambahan fitur Geo Fencing (absensi disekitar lokasi yang ditentukan)

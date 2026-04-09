@@ -28,5 +28,9 @@ export type AttendanceSubmitResult = {
 
 export type ScheduleInsert = TablesInsert<'schedule'>;
 export type ScheduleUpdate = TablesUpdate<'schedule'>;
+export type ScheduleUpdateDetails = ScheduleUpdate & {
+	employee: EmployeeBasic;
+	shift: Shift;
+};
 
 export type ShiftType = Database['public']['Enums']['shift_type'];

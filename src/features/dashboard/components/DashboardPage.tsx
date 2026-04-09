@@ -13,7 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/lib/supabase';
 import { useSession } from '@/features/auth/auth.hooks';
-import { ScheduleList } from '@/features/schedule/components/ScheduleList';
+import { ScheduleTable } from '@/features/schedule/components/ScheduleList';
 import { ScheduleForm } from '@/features/schedule/components/ScheduleForm';
 import { cn } from '@/lib/utils';
 import { format, parse } from 'date-fns';
@@ -160,7 +160,7 @@ export const DashboardPage: React.FC = () => {
 														className="hover:bg-slate-50/50 transition-colors">
 														<TableCell className="font-medium text-slate-900">{log?.employee?.nama}</TableCell>
 
-														<TableCell className="text-slate-500">{`${format(parse(log.schedule?.shift?.checkin_time, 'HH:mm:ss', new Date()), 'HH:mm')} - ${format(parse(log.schedule?.shift?.checkout_time, 'HH:mm:ss', new Date()), 'HH:mm')}`}</TableCell>
+														<TableCell className="text-slate-500">{`${format(parse(log.schedule?.shift?.checkin_time || '', 'HH:mm:ss', new Date()), 'HH:mm')} - ${format(parse(log.schedule?.shift?.checkout_time || '', 'HH:mm:ss', new Date()), 'HH:mm')}`}</TableCell>
 														<TableCell className="text-slate-500">{log.schedule.shift.name}</TableCell>
 														<TableCell className="text-slate-500">{log.check_in ? format(new Date(log.check_in), 'HH:mm:ss') : '-'}</TableCell>
 														<TableCell className="text-slate-500">{log.check_out ? format(new Date(log.check_out), 'HH:mm:ss') : '-'}</TableCell>
@@ -224,7 +224,7 @@ export const DashboardPage: React.FC = () => {
 								<ScheduleForm />
 							</CardHeader>
 							<CardContent>
-								<ScheduleList />
+								<ScheduleTable />
 							</CardContent>
 						</Card>
 					</TabsContent>

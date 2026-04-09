@@ -130,24 +130,24 @@ export type Database = {
       }
       shift: {
         Row: {
-          checkin_time: string
-          checkout_time: string
+          checkin_time: string | null
+          checkout_time: string | null
           created_at: string
           id: string
           name: Database["public"]["Enums"]["shift_type"] | null
           overdue: number
         }
         Insert: {
-          checkin_time: string
-          checkout_time: string
+          checkin_time?: string | null
+          checkout_time?: string | null
           created_at?: string
           id?: string
           name?: Database["public"]["Enums"]["shift_type"] | null
           overdue: number
         }
         Update: {
-          checkin_time?: string
-          checkout_time?: string
+          checkin_time?: string | null
+          checkout_time?: string | null
           created_at?: string
           id?: string
           name?: Database["public"]["Enums"]["shift_type"] | null
@@ -161,10 +161,14 @@ export type Database = {
     }
     Functions: {
       do_attendance: { Args: { p_employee_id: string }; Returns: string }
+      generate_bulk_schedule: {
+        Args: { emp_ids: string[]; end_date: string; start_date: string }
+        Returns: undefined
+      }
     }
     Enums: {
       attendance_status: "Hadir" | "Terlambat" | "Izin" | "Alfa"
-      shift_type: "Pagi" | "Sore" | "Malam"
+      shift_type: "Pagi" | "Sore" | "Malam" | "Libur"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -293,7 +297,7 @@ export const Constants = {
   public: {
     Enums: {
       attendance_status: ["Hadir", "Terlambat", "Izin", "Alfa"],
-      shift_type: ["Pagi", "Sore", "Malam"],
+      shift_type: ["Pagi", "Sore", "Malam", "Libur"],
     },
   },
 } as const
