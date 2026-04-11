@@ -80,7 +80,7 @@ export function ScheduleForm() {
 					<Button
 						variant="default"
 						className="bg-primary hover:bg-primary/90">
-						Jadwal Massal
+						Buat Jadwal
 					</Button>
 				}
 			/>
@@ -171,7 +171,7 @@ export function ScheduleForm() {
 							</Popover>
 						</div>
 						<div className="space-y-2">
-							<Label>Tanggal Selesai (Opsional)</Label>
+							<Label>Tanggal Selesai</Label>
 							<Popover>
 								<PopoverTrigger
 									render={
