@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getSchedules, createSchedule, getSchedulesByShift, getShifts, deleteSchedule } from './schedule.services';
+import { getSchedules, createSchedule, updateSchedule, getSchedulesByShift, getShifts, deleteSchedule, bulkUpdateSchedule } from './schedule.services';
 import { ScheduleInsert, ShiftType } from '@/shared/types';
 import { toast } from 'sonner';
 
@@ -32,6 +32,26 @@ export const useSchedule = (shift?: ShiftType) => {
 		},
 	});
 
+	const updateMutation = useMutation({
+		mutationFn: ({ id, shiftId }: { id: string; shiftId: string }) => updateSchedule(id, shiftId),
+		onSuccess: () => {
+			toast.success('Jadwal berhasil diperbarui');
+			queryClient.invalidateQueries({ queryKey: ['schedule'] });
+		},
+		onError: (error: any) => {
+			toast.error(error.message || 'Gagal memperbarui jadwal');
+		},
+	});
+
+	const bulkUpdateMutation = useMutation({
+		mutationFn: (data: { employee_ids: string[]; start_date: string; end_date: string }) => bulkUpdateSchedule(data),
+		onSuccess: () => {
+			toast.success(`Berhasil membuatjadwal`);
+			// toast.success(`Berhasil membuat ${data.totalGenerated} jadwal`);
+			queryClient.invalidateQueries({ queryKey: ['schedule'] });
+		},
+	});
+
 	const deleteMutation = useMutation({
 		mutationFn: (id: string) => deleteSchedule(id),
 		onSuccess: () => {
@@ -48,10 +68,10 @@ export const useSchedule = (shift?: ShiftType) => {
 		schedules: schedulesQuery.data,
 		deleteMutationSchedule: deleteMutation,
 		schedulesLoading: schedulesQuery.isLoading,
-
+		update: updateMutation,
 		schedulesByShift: schedulesByShiftQuery.data,
 		schedulesByShiftLoading: schedulesByShiftQuery.isLoading,
-
+		bulkUpdate: bulkUpdateMutation,
 		create: createMutation,
 	};
 };

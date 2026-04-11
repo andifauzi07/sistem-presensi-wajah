@@ -36,6 +36,8 @@ export const useAttendance = () => {
 				exact: true,
 			});
 
+			console.log('result :', result.type);
+
 			switch (result.type) {
 				case 'check-in-success':
 					toast.success(`Halo ${result.employee?.nama}, Check-in berhasil. Selamat bekerja!`);
@@ -47,6 +49,10 @@ export const useAttendance = () => {
 
 				case 'already-completed':
 					toast.info(`Presensi Anda untuk hari ini sudah selesai dan terverifikasi.`);
+					break;
+
+				case 'day-off':
+					toast.info(`Hai ${result.employee?.nama}, anda sedang libur. Nikmati hari libur Anda!`);
 					break;
 
 				case 'unknown':
