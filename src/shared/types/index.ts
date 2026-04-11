@@ -34,3 +34,16 @@ export type ScheduleUpdateDetails = ScheduleUpdate & {
 };
 
 export type ShiftType = Database['public']['Enums']['shift_type'];
+
+export type GeolocationState = {
+	latitude: number | null;
+	longitude: number | null;
+	loading?: boolean;
+	error?: string | null;
+};
+
+export interface AttendanceInput {
+	descriptor: number[];
+	latitude: number | null;
+	longitude: number | null;
+}

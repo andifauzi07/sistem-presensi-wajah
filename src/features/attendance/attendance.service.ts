@@ -1,12 +1,12 @@
 import { supabase } from '@/lib/supabase';
-import { AttendanceDetail, Employee } from '@/shared/types';
+import { AttendanceDetail, AttendanceInput } from '@/shared/types';
 
-type EmployeeForRecognition = Pick<Employee, 'id' | 'nama' | 'descriptor' | 'email' | 'jabatan' | 'created_at'>;
-
-export const submitAttendanceByDescriptor = async (faceDescriptor: number[]) => {
+export const submitAttendanceByDescriptor = async (payload: AttendanceInput) => {
 	const { data, error } = await supabase.functions.invoke('Create-Attendance', {
 		body: {
-			descriptor: faceDescriptor,
+			descriptor: payload.descriptor,
+			latitude: payload.latitude,
+			longitude: payload.longitude,
 		},
 	});
 

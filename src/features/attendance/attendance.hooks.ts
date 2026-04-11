@@ -1,8 +1,11 @@
+import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { getEmployeesAttendance, submitAttendanceByDescriptor } from './attendance.service';
-import { useEffect } from 'react';
+
 import { supabase } from '@/lib/supabase';
+import { AttendanceInput, GeolocationState } from '@/shared/types';
+import { getEmployeesAttendance, submitAttendanceByDescriptor } from './attendance.service';
+import { getCurrentLocation } from './attendance.helper';
 
 const formatTime = (time: string | null) => time?.split(':').slice(0, 2).join(':') || '--:--';
 
@@ -29,14 +32,12 @@ export const useAttendance = () => {
 	}, [queryClient]);
 
 	const mutation = useMutation({
-		mutationFn: (descriptor: number[]) => submitAttendanceByDescriptor(descriptor),
+		mutationFn: (payload: AttendanceInput) => submitAttendanceByDescriptor(payload),
 		onSuccess: async (result) => {
 			await queryClient.refetchQueries({
 				queryKey: ['dashboard'],
 				exact: true,
 			});
-
-			console.log('result :', result.type);
 
 			switch (result.type) {
 				case 'check-in-success':
@@ -75,6 +76,10 @@ export const useAttendance = () => {
 					toast.error(`Hai ${result.employee?.nama}, jadwal Anda tidak ditemukan untuk hari ini. Silakan hubungi Admin.`);
 					break;
 
+				case 'out-of-distance':
+					toast.error('Anda berada diluar area kantor, presensi hanya dapat dilakukan pada area kantor.');
+					break;
+
 				default:
 					toast.error('Terjadi kesalahan sistem. Silakan coba lagi.');
 			}
@@ -88,5 +93,49 @@ export const useAttendance = () => {
 		...attendance,
 		mutate: mutation.mutate,
 		isPending: mutation.isPending || attendance.isLoading,
+	};
+};
+
+export const useGeolocation = () => {
+	const [state, setState] = useState<GeolocationState>({
+		latitude: null,
+		longitude: null,
+		loading: true,
+		error: null,
+	});
+
+	const fetchLocation = useCallback(async () => {
+		try {
+			setState((prev) => ({
+				...prev,
+				loading: true,
+				error: null,
+			}));
+
+			const position = await getCurrentLocation();
+
+			setState({
+				latitude: position.coords.latitude,
+				longitude: position.coords.longitude,
+				loading: false,
+				error: null,
+			});
+		} catch (err) {
+			toast.error('Gagal mendapatkan lokasi. Pastikan Anda telah memberikan izin akses lokasi dan coba lagi.');
+			setState((prev) => ({
+				...prev,
+				loading: false,
+				error: err instanceof Error ? err.message : 'Gagal mendapatkan lokasi',
+			}));
+		}
+	}, []);
+
+	useEffect(() => {
+		fetchLocation();
+	}, [fetchLocation]);
+
+	return {
+		...state,
+		refreshLocation: fetchLocation,
 	};
 };

@@ -1,9 +1,9 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { format } from 'date-fns';
-import { Employee, AttendanceLog, Attendance } from '@/shared/types';
+import { Employee, Attendance } from '@/shared/types';
 
-export const generateAttendanceReport = (employees: Employee[], logs: AttendanceLog[], month: Date) => {
+export const generateAttendanceReport = (employees: Employee[], logs: any[], month: Date) => {
 	const doc = new jsPDF();
 	const monthName = format(month, 'MMMM yyyy');
 
@@ -20,7 +20,7 @@ export const generateAttendanceReport = (employees: Employee[], logs: Attendance
 	const tableData = employees.map((emp) => {
 		const empLogs = logs.filter((log) => log.employeeId === emp.id && format(new Date(log.timestamp), 'MMMM yyyy') === monthName);
 
-		return [emp.name, emp.email, empLogs.filter((l) => l.type === 'check-in').length, empLogs.filter((l) => l.type === 'check-out').length, empLogs.length];
+		return [emp.nama, emp.email, empLogs.filter((l) => l.type === 'check-in').length, empLogs.filter((l) => l.type === 'check-out').length, empLogs.length];
 	});
 
 	// Table

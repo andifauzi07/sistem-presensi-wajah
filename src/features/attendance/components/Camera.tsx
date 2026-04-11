@@ -17,6 +17,24 @@ export const Camera: React.FC<CameraProps> = ({ onCapture, isLoading }) => {
 	const [isDetecting, setIsDetecting] = useState(false);
 	const [cameraError, setCameraError] = useState<string | null>(null);
 
+	const startCamera = async () => {
+		try {
+			setCameraError(null);
+			const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+			if (videoRef.current) {
+				videoRef.current.srcObject = stream;
+				setIsCameraReady(true);
+			}
+		} catch (error: any) {
+			console.error('Gagal Memulai Kamera', error);
+			if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+				setCameraError('Akses kamera ditolak. Harap izinkan akses kamera di pengaturan browser Anda dan segarkan halaman.');
+			} else {
+				setCameraError('Kamera tidak dapat diakses. Pastikan kamera terhubung dan tidak sedang digunakan oleh aplikasi lain.');
+			}
+		}
+	};
+
 	useEffect(() => {
 		const init = async () => {
 			try {
@@ -36,24 +54,6 @@ export const Camera: React.FC<CameraProps> = ({ onCapture, isLoading }) => {
 			}
 		};
 	}, []);
-
-	const startCamera = async () => {
-		try {
-			setCameraError(null);
-			const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-			if (videoRef.current) {
-				videoRef.current.srcObject = stream;
-				setIsCameraReady(true);
-			}
-		} catch (error: any) {
-			console.error('Gagal Memulai Kamera', error);
-			if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-				setCameraError('Akses kamera ditolak. Harap izinkan akses kamera di pengaturan browser Anda dan segarkan halaman.');
-			} else {
-				setCameraError('Kamera tidak dapat diakses. Pastikan kamera terhubung dan tidak sedang digunakan oleh aplikasi lain.');
-			}
-		}
-	};
 
 	const handleCapture = async () => {
 		if (!videoRef.current || !isModelLoaded) return;

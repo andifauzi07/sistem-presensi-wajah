@@ -1,6 +1,6 @@
 import React from 'react';
 import { Camera } from './Camera';
-import { useAttendance } from '../attendance.hooks';
+import { useAttendance, useGeolocation } from '../attendance.hooks';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -13,10 +13,17 @@ import { format, parse } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 export const AttendancePage: React.FC = () => {
-	const { data: attendance, isLoading: isAttendanceLoading, mutate, isPending } = useAttendance();
+	const { latitude, longitude, loading: loadingLocation, error: errorLocation } = useGeolocation();
+	const { data: attendance, isLoading: isAttendanceLoading, mutate: submitAttendance, isPending } = useAttendance();
 
-	const handleCapture = (descriptor: number[]) => {
-		mutate(descriptor);
+	const handleCapture = async (descriptor: number[]) => {
+		if (!errorLocation && !loadingLocation) {
+			submitAttendance({
+				descriptor,
+				latitude,
+				longitude,
+			});
+		}
 	};
 
 	return (
