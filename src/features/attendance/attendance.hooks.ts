@@ -76,9 +76,9 @@ export const useAttendance = () => {
 					toast.error(`Hai ${result.employee?.nama}, jadwal Anda tidak ditemukan untuk hari ini. Silakan hubungi Admin.`);
 					break;
 
-				case 'out-of-distance':
-					toast.error('Anda berada diluar area kantor, presensi hanya dapat dilakukan pada area kantor.');
-					break;
+				// case 'out-of-distance':
+				// 	toast.error('Anda berada diluar area kantor, presensi hanya dapat dilakukan pada area kantor.');
+				// 	break;
 
 				default:
 					toast.error('Terjadi kesalahan sistem. Silakan coba lagi.');
